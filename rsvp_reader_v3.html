@@ -1,0 +1,583 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #080808;
+  color: #fff;
+  font-family: 'Geist', sans-serif;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+#screen-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  padding: 2.5rem 2rem;
+  gap: 2rem;
+}
+
+#screen-reader {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  position: relative;
+}
+
+.wordmark {
+  font-family: 'Geist', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+}
+
+.wordmark em { color: #e03; font-style: normal; }
+
+.tagline {
+  font-family: 'Instrument Serif', serif;
+  font-size: 30px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.tagline span { color: #3a3a3a; }
+
+.input-area {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+textarea {
+  width: 100%;
+  height: 148px;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 10px;
+  color: #d4d4d4;
+  font-family: 'Geist', sans-serif;
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.65;
+  padding: 14px 16px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea:focus { border-color: #2e2e2e; }
+textarea::placeholder { color: #2a2a2a; }
+
+.row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wpm-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wpm-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.wpm-label {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2e2e2e;
+}
+
+.wpm-val {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  color: #e03;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: #1a1a1a;
+  outline: none;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e03;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+.wc {
+  font-size: 11px;
+  color: #252525;
+  text-align: right;
+  margin-top: -4px;
+}
+
+.wc.warn { color: #e03; }
+
+.btn-go {
+  background: #fff;
+  border: none;
+  color: #080808;
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 22px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-go:hover { background: #e8e8e8; }
+.btn-go:active { transform: scale(0.97); }
+
+.reader-stage {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.h-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: #111;
+}
+
+.h-line.top { top: 24px; }
+.h-line.bot { bottom: 24px; }
+
+.v-line {
+  position: absolute;
+  top: 24px; bottom: 24px;
+  width: 1px;
+  background: #141414;
+  left: 50%;
+}
+
+.word-layer {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  transform: translateY(-54%);
+  height: 90px;
+  pointer-events: none;
+}
+
+.wp {
+  position: absolute;
+  font-family: 'Instrument Serif', serif;
+  font-size: 58px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  top: 0;
+  color: #fff;
+}
+
+.wp.pivot { color: #e03; }
+
+.spd-tag {
+  position: absolute;
+  bottom: 6px;
+  right: 16px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #1e1e1e;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+.btn-skip {
+  background: #111;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  color: #3a3a3a;
+  cursor: pointer;
+  font-family: 'Geist', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 14px;
+  height: 36px;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.btn-skip:hover { color: #aaa; border-color: #2e2e2e; }
+.btn-skip svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.btn-pp {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  color: #080808;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.btn-pp:hover { background: #e8e8e8; }
+.btn-pp:active { transform: scale(0.95); }
+.btn-pp svg { width: 18px; height: 18px; }
+
+.prog-track {
+  width: 100%;
+  max-width: 680px;
+  margin-top: 28px;
+  height: 1px;
+  background: #111;
+}
+
+.prog-fill {
+  height: 100%;
+  background: #222;
+  transition: width 0.08s linear;
+}
+
+.prog-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #252525;
+  width: 100%;
+  max-width: 680px;
+  letter-spacing: 0.06em;
+}
+
+.btn-back-r {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: #2a2a2a;
+  cursor: pointer;
+  font-family: 'Geist', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-back-r:hover { color: #666; }
+.btn-back-r svg { width: 14px; height: 14px; }
+
+.done-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  text-align: center;
+}
+
+.done-wrap h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.done-wrap p { font-size: 12px; color: #2e2e2e; letter-spacing: 0.08em; }
+
+.btn-again {
+  margin-top: 6px;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 8px;
+  color: #555;
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  padding: 0 18px;
+  height: 34px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.btn-again:hover { color: #fff; border-color: #333; }
+</style>
+
+<canvas id="mc" style="display:none"></canvas>
+
+<div id="screen-input">
+  <div class="wordmark">rs<em>v</em>p</div>
+  <p class="tagline">Read faster.<br><span>One word at a time.</span></p>
+
+  <div class="input-area">
+    <textarea id="ti" placeholder="Paste your text here — up to 2,000 words"></textarea>
+    <div class="row-bottom">
+      <div class="wpm-wrap">
+        <div class="wpm-top">
+          <span class="wpm-label">Speed</span>
+          <span class="wpm-val" id="wv">360 wpm</span>
+        </div>
+        <input type="range" id="ws" min="100" max="900" step="10" value="360">
+        <div class="wc" id="wc">0 / 2000 words</div>
+      </div>
+      <button class="btn-go" id="bg">
+        Continue
+        <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-reader">
+  <button class="btn-back-r" id="bbk">
+    <svg viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    back
+  </button>
+
+  <div class="reader-stage" id="rs">
+    <div class="h-line top"></div>
+    <div class="h-line bot"></div>
+    <div class="v-line"></div>
+    <div class="word-layer" id="wl">
+      <span class="wp before" id="wb"></span>
+      <span class="wp pivot" id="wp"></span>
+      <span class="wp after" id="wa"></span>
+    </div>
+    <div class="spd-tag" id="st">360 wpm</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-skip" id="brw">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M11 4L7 8l4 4M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      −5
+    </button>
+
+    <button class="btn-pp" id="bpp" aria-label="Play/Pause">
+      <svg id="ipl" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.5v9l7-4.5-7-4.5z"/></svg>
+      <svg id="ipa" viewBox="0 0 16 16" fill="currentColor" style="display:none"><path d="M5 3h2v10H5V3zm4 0h2v10H9V3z"/></svg>
+    </button>
+
+    <button class="btn-skip" id="bfw">
+      +5
+      <svg viewBox="0 0 16 16" fill="none"><path d="M5 4l4 4-4 4M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  <div class="prog-labels">
+    <span id="pl">0 of 0</span>
+    <span id="pr">0:00 remaining</span>
+  </div>
+
+  <div class="done-wrap" id="dw">
+    <h2>Done.</h2>
+    <p id="ds"></p>
+    <button class="btn-again" id="ba">Read again</button>
+  </div>
+</div>
+
+<script>
+const ti = document.getElementById('ti');
+const wc = document.getElementById('wc');
+const ws = document.getElementById('ws');
+const wv = document.getElementById('wv');
+const bg = document.getElementById('bg');
+const si = document.getElementById('screen-input');
+const sr = document.getElementById('screen-reader');
+const rsEl = document.getElementById('rs');
+const wl = document.getElementById('wl');
+const wb = document.getElementById('wb');
+const wpEl = document.getElementById('wp');
+const wa = document.getElementById('wa');
+const st = document.getElementById('st');
+const bpp = document.getElementById('bpp');
+const ipl = document.getElementById('ipl');
+const ipa = document.getElementById('ipa');
+const brw = document.getElementById('brw');
+const bfw = document.getElementById('bfw');
+const pf = document.getElementById('pf');
+const pl = document.getElementById('pl');
+const pr = document.getElementById('pr');
+const bbk = document.getElementById('bbk');
+const dw = document.getElementById('dw');
+const ds = document.getElementById('ds');
+const ba = document.getElementById('ba');
+const mc = document.getElementById('mc');
+const ctx = mc.getContext('2d');
+
+const FONT = '58px "Instrument Serif", serif';
+const MAX = 2000;
+
+let words = [], idx = 0, wpm = 360, playing = false, tmr = null;
+
+function measure(t) { ctx.font = FONT; return ctx.measureText(t).width; }
+
+function pivot(w) {
+  const l = w.replace(/[^a-zA-Z0-9]/g,'').length;
+  if (l <= 1) return 0;
+  if (l <= 5) return 1;
+  if (l <= 9) return Math.floor(l * 0.35);
+  return Math.floor(l * 0.3);
+}
+
+function show(i) {
+  if (!words.length) return;
+  i = Math.max(0, Math.min(i, words.length - 1));
+  idx = i;
+  const w = words[i];
+  const p = pivot(w);
+  const bs = w.slice(0, p), ps = w[p] || '', as = w.slice(p + 1);
+
+  wb.textContent = bs;
+  wpEl.textContent = ps;
+  wa.textContent = as;
+
+  const pw = measure(ps), bw = measure(bs);
+  const cx = rsEl.offsetWidth / 2;
+  const pl2 = cx - pw / 2;
+
+  wpEl.style.left = pl2 + 'px';
+  wb.style.left = (pl2 - bw) + 'px';
+  wa.style.left = (pl2 + pw) + 'px';
+
+  const pct = words.length > 1 ? (i / (words.length - 1)) * 100 : 100;
+  pf.style.width = Math.round(pct) + '%';
+  pl.textContent = (i + 1) + ' of ' + words.length;
+  const rem = Math.max(0, words.length - 1 - i);
+  const s = Math.round((rem / wpm) * 60);
+  pr.textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0') + ' remaining';
+}
+
+function play() {
+  if (idx >= words.length - 1) idx = 0;
+  playing = true;
+  ipl.style.display = 'none';
+  ipa.style.display = 'block';
+  dw.style.display = 'none';
+  tick();
+}
+
+function pause() {
+  playing = false;
+  ipl.style.display = 'block';
+  ipa.style.display = 'none';
+  clearTimeout(tmr);
+}
+
+function tick() {
+  if (!playing) return;
+  show(idx);
+  if (idx >= words.length - 1) { pause(); done(); return; }
+  idx++;
+  tmr = setTimeout(tick, Math.round(60000 / wpm));
+}
+
+function done() {
+  dw.style.display = 'flex';
+  const m = Math.round(words.length / wpm);
+  ds.textContent = words.length + ' words · ' + wpm + ' wpm · ~' + (m < 1 ? '< 1' : m) + ' min';
+}
+
+ti.addEventListener('input', () => {
+  const w = ti.value.trim() ? ti.value.trim().split(/\s+/) : [];
+  wc.textContent = Math.min(w.length, MAX) + ' / ' + MAX + ' words';
+  wc.className = 'wc' + (w.length > MAX ? ' warn' : '');
+});
+
+ws.addEventListener('input', () => {
+  wpm = parseInt(ws.value);
+  wv.textContent = wpm + ' wpm';
+  st.textContent = wpm + ' wpm';
+});
+
+bg.addEventListener('click', () => {
+  const raw = ti.value.trim();
+  if (!raw) { ti.focus(); return; }
+  let w = raw.split(/\s+/);
+  if (w.length > MAX) w = w.slice(0, MAX);
+  words = w; idx = 0;
+  wpm = parseInt(ws.value);
+  st.textContent = wpm + ' wpm';
+  si.style.display = 'none';
+  sr.style.display = 'flex';
+  dw.style.display = 'none';
+  requestAnimationFrame(() => requestAnimationFrame(() => { show(0); play(); }));
+});
+
+bpp.addEventListener('click', () => { if (playing) pause(); else play(); });
+
+brw.addEventListener('click', () => {
+  const ni = Math.max(0, idx - (playing ? 6 : 5));
+  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else show(ni);
+});
+
+bfw.addEventListener('click', () => {
+  const ni = Math.min(words.length - 1, idx + 5);
+  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else show(ni);
+});
+
+bbk.addEventListener('click', () => { pause(); sr.style.display = 'none'; si.style.display = 'flex'; });
+
+ba.addEventListener('click', () => { dw.style.display = 'none'; idx = 0; show(0); play(); });
+
+window.addEventListener('resize', () => { if (sr.style.display !== 'none') show(idx); });
+
+document.addEventListener('keydown', e => {
+  if (sr.style.display === 'none') return;
+  if (e.code === 'Space') { e.preventDefault(); if (playing) pause(); else play(); }
+  if (e.code === 'ArrowLeft') brw.click();
+  if (e.code === 'ArrowRight') bfw.click();
+});
+</script>
