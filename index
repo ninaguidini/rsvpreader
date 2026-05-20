@@ -1,0 +1,629 @@
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #080808;
+  color: #fff;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#screen-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  gap: 2.2rem;
+}
+
+#screen-reader {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.wordmark {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #2e2e2e;
+}
+
+.wordmark em { color: #e03; font-style: normal; }
+
+.tagline {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 38px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  line-height: 1.22;
+}
+
+.tagline span { color: #282828; }
+
+.input-area {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+textarea {
+  width: 100%;
+  height: 180px;
+  background: #0f0f0f;
+  border: 1px solid #1c1c1c;
+  border-radius: 12px;
+  color: #c8c8c8;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  padding: 16px 18px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea:focus { border-color: #2a2a2a; }
+textarea::placeholder { color: #242424; }
+
+.row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.wpm-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wpm-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.wpm-label {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #282828;
+}
+
+.wpm-val {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  color: #e03;
+}
+
+.wc {
+  font-size: 11px;
+  color: #222;
+  text-align: right;
+  margin-top: -4px;
+  letter-spacing: 0.05em;
+}
+
+.wc.warn { color: #e03; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: #1a1a1a;
+  outline: none;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #e03;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+.btn-go {
+  background: #fff;
+  border: none;
+  color: #080808;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0 24px;
+  height: 42px;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-go:hover { background: #e6e6e6; }
+.btn-go:active { transform: scale(0.97); }
+
+.reader-stage {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.h-line { position: absolute; left: 0; right: 0; height: 1px; background: #0f0f0f; }
+.h-line.top { top: 28px; }
+.h-line.bot { bottom: 28px; }
+.v-line { position: absolute; top: 28px; bottom: 28px; width: 1px; background: #121212; left: 50%; }
+
+.word-layer {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  transform: translateY(-52%);
+  height: 110px;
+  pointer-events: none;
+}
+
+.wp {
+  position: absolute;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 76px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  top: 0;
+  color: #fff;
+}
+
+.wp.pivot { color: #e03; }
+
+.punct-flash {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Georgia, serif;
+  font-size: 13px;
+  color: #1e1e1e;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.punct-flash.show { opacity: 1; }
+
+.spd-tag {
+  position: absolute;
+  bottom: 8px;
+  right: 18px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #1c1c1c;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-top: 36px;
+}
+
+.btn-skip {
+  background: #0f0f0f;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  color: #333;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 18px;
+  height: 40px;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.btn-skip:hover { color: #999; border-color: #2c2c2c; }
+.btn-skip svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.btn-pp {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  color: #080808;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.btn-pp:hover { background: #e6e6e6; }
+.btn-pp:active { transform: scale(0.95); }
+.btn-pp svg { width: 20px; height: 20px; }
+
+.prog-track {
+  width: 100%;
+  max-width: 860px;
+  margin-top: 32px;
+  height: 1px;
+  background: #0f0f0f;
+}
+
+.prog-fill { height: 100%; background: #1e1e1e; transition: width 0.08s linear; }
+
+.prog-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 9px;
+  font-size: 11px;
+  color: #222;
+  width: 100%;
+  max-width: 860px;
+  letter-spacing: 0.07em;
+}
+
+.btn-back-r {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  background: none;
+  border: none;
+  color: #242424;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-back-r:hover { color: #666; }
+.btn-back-r svg { width: 14px; height: 14px; }
+
+.done-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 32px;
+  text-align: center;
+}
+
+.done-wrap h2 {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.done-wrap p { font-size: 12px; color: #2a2a2a; letter-spacing: 0.1em; }
+
+.btn-again {
+  margin-top: 4px;
+  background: #0f0f0f;
+  border: 1px solid #1c1c1c;
+  border-radius: 10px;
+  color: #444;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  padding: 0 20px;
+  height: 36px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.btn-again:hover { color: #fff; border-color: #333; }
+</style>
+
+<canvas id="mc" style="display:none"></canvas>
+
+<div id="screen-input">
+  <div class="wordmark">rs<em>v</em>p</div>
+  <p class="tagline">Read faster.<br><span>One word at a time.</span></p>
+
+  <div class="input-area">
+    <textarea id="ti" placeholder="Paste your text here — up to 2,000 words"></textarea>
+    <div class="row-bottom">
+      <div class="wpm-wrap">
+        <div class="wpm-top">
+          <span class="wpm-label">Speed</span>
+          <span class="wpm-val" id="wv">360 wpm</span>
+        </div>
+        <input type="range" id="ws" min="100" max="900" step="10" value="360">
+        <div class="wc" id="wc">0 / 2000 words</div>
+      </div>
+      <button class="btn-go" id="bg">
+        Continue
+        <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-reader">
+  <button class="btn-back-r" id="bbk">
+    <svg viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    back
+  </button>
+
+  <div class="reader-stage" id="rs">
+    <div class="h-line top"></div>
+    <div class="h-line bot"></div>
+    <div class="v-line"></div>
+    <div class="word-layer" id="wl">
+      <span class="wp before" id="wbef"></span>
+      <span class="wp pivot" id="wpiv"></span>
+      <span class="wp after" id="waft"></span>
+    </div>
+    <div class="punct-flash" id="pf-label"></div>
+    <div class="spd-tag" id="st">360 wpm</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-skip" id="brw">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M11 4L7 8l4 4M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      −5
+    </button>
+    <button class="btn-pp" id="bpp" aria-label="Play/Pause">
+      <svg id="ipl" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.5v9l7-4.5-7-4.5z"/></svg>
+      <svg id="ipa" viewBox="0 0 16 16" fill="currentColor" style="display:none"><path d="M5 3h2v10H5V3zm4 0h2v10H9V3z"/></svg>
+    </button>
+    <button class="btn-skip" id="bfw">
+      +5
+      <svg viewBox="0 0 16 16" fill="none"><path d="M5 4l4 4-4 4M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="prog-track"><div class="prog-fill" id="pgf" style="width:0%"></div></div>
+  <div class="prog-labels">
+    <span id="pgl">0 of 0</span>
+    <span id="pgr">0:00 remaining</span>
+  </div>
+
+  <div class="done-wrap" id="dw">
+    <h2>Done.</h2>
+    <p id="ds"></p>
+    <button class="btn-again" id="ba">Read again</button>
+  </div>
+</div>
+
+<script>
+const ti = document.getElementById('ti');
+const wcEl = document.getElementById('wc');
+const ws = document.getElementById('ws');
+const wv = document.getElementById('wv');
+const bg = document.getElementById('bg');
+const si = document.getElementById('screen-input');
+const sr = document.getElementById('screen-reader');
+const rsEl = document.getElementById('rs');
+const wbef = document.getElementById('wbef');
+const wpiv = document.getElementById('wpiv');
+const waft = document.getElementById('waft');
+const pfLabel = document.getElementById('pf-label');
+const st = document.getElementById('st');
+const bpp = document.getElementById('bpp');
+const ipl = document.getElementById('ipl');
+const ipa = document.getElementById('ipa');
+const brw = document.getElementById('brw');
+const bfw = document.getElementById('bfw');
+const pgf = document.getElementById('pgf');
+const pgl = document.getElementById('pgl');
+const pgr = document.getElementById('pgr');
+const bbk = document.getElementById('bbk');
+const dw = document.getElementById('dw');
+const ds = document.getElementById('ds');
+const ba = document.getElementById('ba');
+const mc = document.getElementById('mc');
+const ctx2 = mc.getContext('2d');
+
+const FONT = '76px Georgia, serif';
+const MAX = 2000;
+
+let tokens = [], idx = 0, wpm = 360, playing = false, tmr = null;
+
+function measure(t) { ctx2.font = FONT; return ctx2.measureText(t).width; }
+
+function pivotIdx(w) {
+  const l = w.replace(/[^a-zA-Z0-9]/g,'').length;
+  if (l <= 1) return 0;
+  if (l <= 5) return 1;
+  if (l <= 9) return Math.floor(l * 0.35);
+  return Math.floor(l * 0.3);
+}
+
+/* Pause multipliers for punctuation at end of a token's display word */
+const PAUSE = {
+  '.': 3.2, '!': 3.2, '?': 3.2,
+  ',': 1.6, ';': 1.8, ':': 1.8,
+  '—': 1.4, '–': 1.4, '-': 1.1,
+  ')': 1.1, ']': 1.1, '"': 1.0, "'": 1.0
+};
+
+/* Label shown during pause */
+const PAUSE_LABEL = {
+  '.': '·', '!': '·', '?': '·',
+  ',': '·', ';': '·', ':': '·',
+  '—': '·', '–': '·'
+};
+
+function getPauseMult(word) {
+  const last = word[word.length - 1];
+  return PAUSE[last] || 1.0;
+}
+
+function getPauseLabel(word) {
+  const last = word[word.length - 1];
+  return PAUSE_LABEL[last] || null;
+}
+
+/* Tokenise: split by whitespace, keep up to MAX words */
+function tokenise(text) {
+  return text.trim().split(/\s+/).slice(0, MAX);
+}
+
+function showToken(i) {
+  if (!tokens.length) return;
+  i = Math.max(0, Math.min(i, tokens.length - 1));
+  idx = i;
+  const word = tokens[i];
+
+  /* Strip trailing punctuation for pivot calc but show full word */
+  const stripped = word.replace(/[^a-zA-Z0-9]/g, '');
+  const p = pivotIdx(word);
+
+  const bs = word.slice(0, p);
+  const ps = word[p] || '';
+  const as = word.slice(p + 1);
+
+  wbef.textContent = bs;
+  wpiv.textContent = ps;
+  waft.textContent = as;
+
+  const pw = measure(ps), bw = measure(bs);
+  const cx = rsEl.offsetWidth / 2;
+  const pl = cx - pw / 2;
+
+  wpiv.style.left = pl + 'px';
+  wbef.style.left = (pl - bw) + 'px';
+  waft.style.left = (pl + pw) + 'px';
+
+  const pct = tokens.length > 1 ? (i / (tokens.length - 1)) * 100 : 100;
+  pgf.style.width = Math.round(pct) + '%';
+  pgl.textContent = (i + 1) + ' of ' + tokens.length;
+  const rem = Math.max(0, tokens.length - 1 - i);
+  const s = Math.round((rem / wpm) * 60);
+  pgr.textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0') + ' remaining';
+}
+
+function play() {
+  if (idx >= tokens.length - 1) idx = 0;
+  playing = true;
+  ipl.style.display = 'none';
+  ipa.style.display = 'block';
+  dw.style.display = 'none';
+  tick();
+}
+
+function pause() {
+  playing = false;
+  ipl.style.display = 'block';
+  ipa.style.display = 'none';
+  clearTimeout(tmr);
+  pfLabel.className = 'punct-flash';
+}
+
+function tick() {
+  if (!playing) return;
+  showToken(idx);
+
+  if (idx >= tokens.length - 1) {
+    pause();
+    done();
+    return;
+  }
+
+  const word = tokens[idx];
+  const mult = getPauseMult(word);
+  const label = getPauseLabel(word);
+  const baseMs = Math.round(60000 / wpm);
+  const delay = Math.round(baseMs * mult);
+
+  idx++;
+
+  if (label && mult > 1.2) {
+    pfLabel.textContent = label;
+    pfLabel.className = 'punct-flash show';
+    setTimeout(() => { pfLabel.className = 'punct-flash'; }, Math.min(delay - 80, 400));
+  }
+
+  tmr = setTimeout(tick, delay);
+}
+
+function done() {
+  dw.style.display = 'flex';
+  const m = Math.round(tokens.length / wpm);
+  ds.textContent = tokens.length + ' words · ' + wpm + ' wpm · ~' + (m < 1 ? '< 1' : m) + ' min';
+}
+
+ti.addEventListener('input', () => {
+  const w = ti.value.trim() ? ti.value.trim().split(/\s+/) : [];
+  wcEl.textContent = Math.min(w.length, MAX) + ' / ' + MAX + ' words';
+  wcEl.className = 'wc' + (w.length > MAX ? ' warn' : '');
+});
+
+ws.addEventListener('input', () => {
+  wpm = parseInt(ws.value);
+  wv.textContent = wpm + ' wpm';
+  st.textContent = wpm + ' wpm';
+});
+
+bg.addEventListener('click', () => {
+  const raw = ti.value.trim();
+  if (!raw) { ti.focus(); return; }
+  tokens = tokenise(raw);
+  idx = 0;
+  wpm = parseInt(ws.value);
+  st.textContent = wpm + ' wpm';
+  si.style.display = 'none';
+  sr.style.display = 'flex';
+  dw.style.display = 'none';
+  requestAnimationFrame(() => requestAnimationFrame(() => { showToken(0); play(); }));
+});
+
+bpp.addEventListener('click', () => { if (playing) pause(); else play(); });
+
+brw.addEventListener('click', () => {
+  const ni = Math.max(0, idx - (playing ? 6 : 5));
+  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else showToken(ni);
+});
+
+bfw.addEventListener('click', () => {
+  const ni = Math.min(tokens.length - 1, idx + 5);
+  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else showToken(ni);
+});
+
+bbk.addEventListener('click', () => { pause(); sr.style.display = 'none'; si.style.display = 'flex'; });
+ba.addEventListener('click', () => { dw.style.display = 'none'; idx = 0; showToken(0); play(); });
+
+window.addEventListener('resize', () => { if (sr.style.display !== 'none') showToken(idx); });
+
+document.addEventListener('keydown', e => {
+  if (sr.style.display === 'none') return;
+  if (e.code === 'Space') { e.preventDefault(); if (playing) pause(); else play(); }
+  if (e.code === 'ArrowLeft') brw.click();
+  if (e.code === 'ArrowRight') bfw.click();
+});
+</script>
