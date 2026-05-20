@@ -1,13 +1,11 @@
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&display=swap');
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background: #080808;
   color: #fff;
-  font-family: 'Geist', sans-serif;
-  min-height: 600px;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
   overflow: hidden;
 }
 
@@ -16,9 +14,9 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 600px;
-  padding: 2.5rem 2rem;
-  gap: 2rem;
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  gap: 2.2rem;
 }
 
 #screen-reader {
@@ -26,71 +24,70 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 600px;
+  min-height: 100vh;
   position: relative;
 }
 
 .wordmark {
-  font-family: 'Geist', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: #3a3a3a;
+  color: #2e2e2e;
 }
 
 .wordmark em { color: #e03; font-style: normal; }
 
 .tagline {
-  font-family: 'Instrument Serif', serif;
-  font-size: 30px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 38px;
   font-weight: 400;
   color: #fff;
   text-align: center;
-  line-height: 1.25;
+  line-height: 1.22;
 }
 
-.tagline span { color: #3a3a3a; }
+.tagline span { color: #282828; }
 
 .input-area {
   width: 100%;
-  max-width: 540px;
+  max-width: 640px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 textarea {
   width: 100%;
-  height: 148px;
-  background: #111;
-  border: 1px solid #1e1e1e;
-  border-radius: 10px;
-  color: #d4d4d4;
-  font-family: 'Geist', sans-serif;
-  font-size: 13.5px;
-  font-weight: 300;
-  line-height: 1.65;
-  padding: 14px 16px;
+  height: 180px;
+  background: #0f0f0f;
+  border: 1px solid #1c1c1c;
+  border-radius: 12px;
+  color: #c8c8c8;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  padding: 16px 18px;
   resize: none;
   outline: none;
   transition: border-color 0.15s;
 }
 
-textarea:focus { border-color: #2e2e2e; }
-textarea::placeholder { color: #2a2a2a; }
+textarea:focus { border-color: #2a2a2a; }
+textarea::placeholder { color: #242424; }
 
 .row-bottom {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
 .wpm-wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .wpm-top {
@@ -102,16 +99,26 @@ textarea::placeholder { color: #2a2a2a; }
 .wpm-label {
   font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #2e2e2e;
+  color: #282828;
 }
 
 .wpm-val {
-  font-family: 'Instrument Serif', serif;
-  font-size: 20px;
+  font-family: Georgia, serif;
+  font-size: 22px;
   color: #e03;
 }
+
+.wc {
+  font-size: 11px;
+  color: #222;
+  text-align: right;
+  margin-top: -4px;
+  letter-spacing: 0.05em;
+}
+
+.wc.warn { color: #e03; }
 
 input[type=range] {
   -webkit-appearance: none;
@@ -125,8 +132,8 @@ input[type=range] {
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   background: #e03;
   cursor: pointer;
@@ -135,77 +142,55 @@ input[type=range]::-webkit-slider-thumb {
 
 input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
 
-.wc {
-  font-size: 11px;
-  color: #252525;
-  text-align: right;
-  margin-top: -4px;
-}
-
-.wc.warn { color: #e03; }
-
 .btn-go {
   background: #fff;
   border: none;
   color: #080808;
-  font-family: 'Geist', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  padding: 0 22px;
-  height: 40px;
-  border-radius: 8px;
+  letter-spacing: 0.02em;
+  padding: 0 24px;
+  height: 42px;
+  border-radius: 10px;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.12s, transform 0.1s;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
-.btn-go:hover { background: #e8e8e8; }
+.btn-go:hover { background: #e6e6e6; }
 .btn-go:active { transform: scale(0.97); }
 
 .reader-stage {
   position: relative;
   width: 100%;
-  max-width: 680px;
-  height: 200px;
+  max-width: 860px;
+  height: 260px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.h-line {
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  background: #111;
-}
-
-.h-line.top { top: 24px; }
-.h-line.bot { bottom: 24px; }
-
-.v-line {
-  position: absolute;
-  top: 24px; bottom: 24px;
-  width: 1px;
-  background: #141414;
-  left: 50%;
-}
+.h-line { position: absolute; left: 0; right: 0; height: 1px; background: #0f0f0f; }
+.h-line.top { top: 28px; }
+.h-line.bot { bottom: 28px; }
+.v-line { position: absolute; top: 28px; bottom: 28px; width: 1px; background: #121212; left: 50%; }
 
 .word-layer {
   position: absolute;
   top: 50%;
   left: 0; right: 0;
-  transform: translateY(-54%);
-  height: 90px;
+  transform: translateY(-52%);
+  height: 110px;
   pointer-events: none;
 }
 
 .wp {
   position: absolute;
-  font-family: 'Instrument Serif', serif;
-  font-size: 58px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 76px;
   font-weight: 400;
   line-height: 1;
   white-space: nowrap;
@@ -215,47 +200,62 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
 
 .wp.pivot { color: #e03; }
 
+.punct-flash {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Georgia, serif;
+  font-size: 13px;
+  color: #1e1e1e;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.punct-flash.show { opacity: 1; }
+
 .spd-tag {
   position: absolute;
-  bottom: 6px;
-  right: 16px;
+  bottom: 8px;
+  right: 18px;
   font-size: 11px;
-  font-weight: 400;
   letter-spacing: 0.1em;
-  color: #1e1e1e;
+  color: #1c1c1c;
 }
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-top: 28px;
+  gap: 22px;
+  margin-top: 36px;
 }
 
 .btn-skip {
-  background: #111;
+  background: #0f0f0f;
   border: 1px solid #1a1a1a;
-  border-radius: 8px;
-  color: #3a3a3a;
+  border-radius: 10px;
+  color: #333;
   cursor: pointer;
-  font-family: 'Geist', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 14px;
-  height: 36px;
+  gap: 6px;
+  padding: 0 18px;
+  height: 40px;
   transition: color 0.12s, border-color 0.12s;
 }
 
-.btn-skip:hover { color: #aaa; border-color: #2e2e2e; }
+.btn-skip:hover { color: #999; border-color: #2c2c2c; }
 .btn-skip svg { width: 14px; height: 14px; flex-shrink: 0; }
 
 .btn-pp {
-  width: 52px;
-  height: 52px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   background: #fff;
   border: none;
@@ -267,47 +267,41 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
   transition: background 0.12s, transform 0.1s;
 }
 
-.btn-pp:hover { background: #e8e8e8; }
+.btn-pp:hover { background: #e6e6e6; }
 .btn-pp:active { transform: scale(0.95); }
-.btn-pp svg { width: 18px; height: 18px; }
+.btn-pp svg { width: 20px; height: 20px; }
 
 .prog-track {
   width: 100%;
-  max-width: 680px;
-  margin-top: 28px;
+  max-width: 860px;
+  margin-top: 32px;
   height: 1px;
-  background: #111;
+  background: #0f0f0f;
 }
 
-.prog-fill {
-  height: 100%;
-  background: #222;
-  transition: width 0.08s linear;
-}
+.prog-fill { height: 100%; background: #1e1e1e; transition: width 0.08s linear; }
 
 .prog-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  margin-top: 9px;
   font-size: 11px;
-  color: #252525;
+  color: #222;
   width: 100%;
-  max-width: 680px;
-  letter-spacing: 0.06em;
+  max-width: 860px;
+  letter-spacing: 0.07em;
 }
 
 .btn-back-r {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 28px;
+  left: 28px;
   background: none;
   border: none;
-  color: #2a2a2a;
+  color: #242424;
   cursor: pointer;
-  font-family: 'Geist', sans-serif;
   font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   transition: color 0.12s;
   display: flex;
@@ -323,31 +317,30 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 28px;
+  margin-top: 32px;
   text-align: center;
 }
 
 .done-wrap h2 {
-  font-family: 'Instrument Serif', serif;
-  font-size: 28px;
+  font-family: Georgia, serif;
+  font-size: 32px;
   font-weight: 400;
   color: #fff;
 }
 
-.done-wrap p { font-size: 12px; color: #2e2e2e; letter-spacing: 0.08em; }
+.done-wrap p { font-size: 12px; color: #2a2a2a; letter-spacing: 0.1em; }
 
 .btn-again {
-  margin-top: 6px;
-  background: #111;
-  border: 1px solid #1e1e1e;
-  border-radius: 8px;
-  color: #555;
-  font-family: 'Geist', sans-serif;
+  margin-top: 4px;
+  background: #0f0f0f;
+  border: 1px solid #1c1c1c;
+  border-radius: 10px;
+  color: #444;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.1em;
-  padding: 0 18px;
-  height: 34px;
+  padding: 0 20px;
+  height: 36px;
   cursor: pointer;
   transition: color 0.12s, border-color 0.12s;
 }
@@ -391,10 +384,11 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
     <div class="h-line bot"></div>
     <div class="v-line"></div>
     <div class="word-layer" id="wl">
-      <span class="wp before" id="wb"></span>
-      <span class="wp pivot" id="wp"></span>
-      <span class="wp after" id="wa"></span>
+      <span class="wp before" id="wbef"></span>
+      <span class="wp pivot" id="wpiv"></span>
+      <span class="wp after" id="waft"></span>
     </div>
+    <div class="punct-flash" id="pf-label"></div>
     <div class="spd-tag" id="st">360 wpm</div>
   </div>
 
@@ -403,22 +397,20 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
       <svg viewBox="0 0 16 16" fill="none"><path d="M11 4L7 8l4 4M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       −5
     </button>
-
     <button class="btn-pp" id="bpp" aria-label="Play/Pause">
       <svg id="ipl" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.5v9l7-4.5-7-4.5z"/></svg>
       <svg id="ipa" viewBox="0 0 16 16" fill="currentColor" style="display:none"><path d="M5 3h2v10H5V3zm4 0h2v10H9V3z"/></svg>
     </button>
-
     <button class="btn-skip" id="bfw">
       +5
       <svg viewBox="0 0 16 16" fill="none"><path d="M5 4l4 4-4 4M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
 
-  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  <div class="prog-track"><div class="prog-fill" id="pgf" style="width:0%"></div></div>
   <div class="prog-labels">
-    <span id="pl">0 of 0</span>
-    <span id="pr">0:00 remaining</span>
+    <span id="pgl">0 of 0</span>
+    <span id="pgr">0:00 remaining</span>
   </div>
 
   <div class="done-wrap" id="dw">
@@ -430,41 +422,41 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
 
 <script>
 const ti = document.getElementById('ti');
-const wc = document.getElementById('wc');
+const wcEl = document.getElementById('wc');
 const ws = document.getElementById('ws');
 const wv = document.getElementById('wv');
 const bg = document.getElementById('bg');
 const si = document.getElementById('screen-input');
 const sr = document.getElementById('screen-reader');
 const rsEl = document.getElementById('rs');
-const wl = document.getElementById('wl');
-const wb = document.getElementById('wb');
-const wpEl = document.getElementById('wp');
-const wa = document.getElementById('wa');
+const wbef = document.getElementById('wbef');
+const wpiv = document.getElementById('wpiv');
+const waft = document.getElementById('waft');
+const pfLabel = document.getElementById('pf-label');
 const st = document.getElementById('st');
 const bpp = document.getElementById('bpp');
 const ipl = document.getElementById('ipl');
 const ipa = document.getElementById('ipa');
 const brw = document.getElementById('brw');
 const bfw = document.getElementById('bfw');
-const pf = document.getElementById('pf');
-const pl = document.getElementById('pl');
-const pr = document.getElementById('pr');
+const pgf = document.getElementById('pgf');
+const pgl = document.getElementById('pgl');
+const pgr = document.getElementById('pgr');
 const bbk = document.getElementById('bbk');
 const dw = document.getElementById('dw');
 const ds = document.getElementById('ds');
 const ba = document.getElementById('ba');
 const mc = document.getElementById('mc');
-const ctx = mc.getContext('2d');
+const ctx2 = mc.getContext('2d');
 
-const FONT = '58px "Instrument Serif", serif';
+const FONT = '76px Georgia, serif';
 const MAX = 2000;
 
-let words = [], idx = 0, wpm = 360, playing = false, tmr = null;
+let tokens = [], idx = 0, wpm = 360, playing = false, tmr = null;
 
-function measure(t) { ctx.font = FONT; return ctx.measureText(t).width; }
+function measure(t) { ctx2.font = FONT; return ctx2.measureText(t).width; }
 
-function pivot(w) {
+function pivotIdx(w) {
   const l = w.replace(/[^a-zA-Z0-9]/g,'').length;
   if (l <= 1) return 0;
   if (l <= 5) return 1;
@@ -472,36 +464,72 @@ function pivot(w) {
   return Math.floor(l * 0.3);
 }
 
-function show(i) {
-  if (!words.length) return;
-  i = Math.max(0, Math.min(i, words.length - 1));
-  idx = i;
-  const w = words[i];
-  const p = pivot(w);
-  const bs = w.slice(0, p), ps = w[p] || '', as = w.slice(p + 1);
+/* Pause multipliers for punctuation at end of a token's display word */
+const PAUSE = {
+  '.': 3.2, '!': 3.2, '?': 3.2,
+  ',': 1.6, ';': 1.8, ':': 1.8,
+  '—': 1.4, '–': 1.4, '-': 1.1,
+  ')': 1.1, ']': 1.1, '"': 1.0, "'": 1.0
+};
 
-  wb.textContent = bs;
-  wpEl.textContent = ps;
-  wa.textContent = as;
+/* Label shown during pause */
+const PAUSE_LABEL = {
+  '.': '·', '!': '·', '?': '·',
+  ',': '·', ';': '·', ':': '·',
+  '—': '·', '–': '·'
+};
+
+function getPauseMult(word) {
+  const last = word[word.length - 1];
+  return PAUSE[last] || 1.0;
+}
+
+function getPauseLabel(word) {
+  const last = word[word.length - 1];
+  return PAUSE_LABEL[last] || null;
+}
+
+/* Tokenise: split by whitespace, keep up to MAX words */
+function tokenise(text) {
+  return text.trim().split(/\s+/).slice(0, MAX);
+}
+
+function showToken(i) {
+  if (!tokens.length) return;
+  i = Math.max(0, Math.min(i, tokens.length - 1));
+  idx = i;
+  const word = tokens[i];
+
+  /* Strip trailing punctuation for pivot calc but show full word */
+  const stripped = word.replace(/[^a-zA-Z0-9]/g, '');
+  const p = pivotIdx(word);
+
+  const bs = word.slice(0, p);
+  const ps = word[p] || '';
+  const as = word.slice(p + 1);
+
+  wbef.textContent = bs;
+  wpiv.textContent = ps;
+  waft.textContent = as;
 
   const pw = measure(ps), bw = measure(bs);
   const cx = rsEl.offsetWidth / 2;
-  const pl2 = cx - pw / 2;
+  const pl = cx - pw / 2;
 
-  wpEl.style.left = pl2 + 'px';
-  wb.style.left = (pl2 - bw) + 'px';
-  wa.style.left = (pl2 + pw) + 'px';
+  wpiv.style.left = pl + 'px';
+  wbef.style.left = (pl - bw) + 'px';
+  waft.style.left = (pl + pw) + 'px';
 
-  const pct = words.length > 1 ? (i / (words.length - 1)) * 100 : 100;
-  pf.style.width = Math.round(pct) + '%';
-  pl.textContent = (i + 1) + ' of ' + words.length;
-  const rem = Math.max(0, words.length - 1 - i);
+  const pct = tokens.length > 1 ? (i / (tokens.length - 1)) * 100 : 100;
+  pgf.style.width = Math.round(pct) + '%';
+  pgl.textContent = (i + 1) + ' of ' + tokens.length;
+  const rem = Math.max(0, tokens.length - 1 - i);
   const s = Math.round((rem / wpm) * 60);
-  pr.textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0') + ' remaining';
+  pgr.textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0') + ' remaining';
 }
 
 function play() {
-  if (idx >= words.length - 1) idx = 0;
+  if (idx >= tokens.length - 1) idx = 0;
   playing = true;
   ipl.style.display = 'none';
   ipa.style.display = 'block';
@@ -514,26 +542,46 @@ function pause() {
   ipl.style.display = 'block';
   ipa.style.display = 'none';
   clearTimeout(tmr);
+  pfLabel.className = 'punct-flash';
 }
 
 function tick() {
   if (!playing) return;
-  show(idx);
-  if (idx >= words.length - 1) { pause(); done(); return; }
+  showToken(idx);
+
+  if (idx >= tokens.length - 1) {
+    pause();
+    done();
+    return;
+  }
+
+  const word = tokens[idx];
+  const mult = getPauseMult(word);
+  const label = getPauseLabel(word);
+  const baseMs = Math.round(60000 / wpm);
+  const delay = Math.round(baseMs * mult);
+
   idx++;
-  tmr = setTimeout(tick, Math.round(60000 / wpm));
+
+  if (label && mult > 1.2) {
+    pfLabel.textContent = label;
+    pfLabel.className = 'punct-flash show';
+    setTimeout(() => { pfLabel.className = 'punct-flash'; }, Math.min(delay - 80, 400));
+  }
+
+  tmr = setTimeout(tick, delay);
 }
 
 function done() {
   dw.style.display = 'flex';
-  const m = Math.round(words.length / wpm);
-  ds.textContent = words.length + ' words · ' + wpm + ' wpm · ~' + (m < 1 ? '< 1' : m) + ' min';
+  const m = Math.round(tokens.length / wpm);
+  ds.textContent = tokens.length + ' words · ' + wpm + ' wpm · ~' + (m < 1 ? '< 1' : m) + ' min';
 }
 
 ti.addEventListener('input', () => {
   const w = ti.value.trim() ? ti.value.trim().split(/\s+/) : [];
-  wc.textContent = Math.min(w.length, MAX) + ' / ' + MAX + ' words';
-  wc.className = 'wc' + (w.length > MAX ? ' warn' : '');
+  wcEl.textContent = Math.min(w.length, MAX) + ' / ' + MAX + ' words';
+  wcEl.className = 'wc' + (w.length > MAX ? ' warn' : '');
 });
 
 ws.addEventListener('input', () => {
@@ -545,34 +593,32 @@ ws.addEventListener('input', () => {
 bg.addEventListener('click', () => {
   const raw = ti.value.trim();
   if (!raw) { ti.focus(); return; }
-  let w = raw.split(/\s+/);
-  if (w.length > MAX) w = w.slice(0, MAX);
-  words = w; idx = 0;
+  tokens = tokenise(raw);
+  idx = 0;
   wpm = parseInt(ws.value);
   st.textContent = wpm + ' wpm';
   si.style.display = 'none';
   sr.style.display = 'flex';
   dw.style.display = 'none';
-  requestAnimationFrame(() => requestAnimationFrame(() => { show(0); play(); }));
+  requestAnimationFrame(() => requestAnimationFrame(() => { showToken(0); play(); }));
 });
 
 bpp.addEventListener('click', () => { if (playing) pause(); else play(); });
 
 brw.addEventListener('click', () => {
   const ni = Math.max(0, idx - (playing ? 6 : 5));
-  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else show(ni);
+  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else showToken(ni);
 });
 
 bfw.addEventListener('click', () => {
-  const ni = Math.min(words.length - 1, idx + 5);
-  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else show(ni);
+  const ni = Math.min(tokens.length - 1, idx + 5);
+  if (playing) { clearTimeout(tmr); idx = ni; tick(); } else showToken(ni);
 });
 
 bbk.addEventListener('click', () => { pause(); sr.style.display = 'none'; si.style.display = 'flex'; });
+ba.addEventListener('click', () => { dw.style.display = 'none'; idx = 0; showToken(0); play(); });
 
-ba.addEventListener('click', () => { dw.style.display = 'none'; idx = 0; show(0); play(); });
-
-window.addEventListener('resize', () => { if (sr.style.display !== 'none') show(idx); });
+window.addEventListener('resize', () => { if (sr.style.display !== 'none') showToken(idx); });
 
 document.addEventListener('keydown', e => {
   if (sr.style.display === 'none') return;
